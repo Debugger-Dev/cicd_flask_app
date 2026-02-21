@@ -1,0 +1,18 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build','-t','asia-south1-docker.pkg.dev/devidutta-sandbox/pyapp-repo/pyappimage:latest','.']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push','asia-south1-docker.pkg.dev/devidutta-sandbox/pyapp-repo/pyappimage:latest']
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'deploy'
+  - 'pyflaskapp'
+  - '--image'
+  - 'asia-south1-docker.pkg.dev/devidutta-sandbox/pyapprepo/pyappimage:latest'
+  - '--region'
+  - 'asia-south1'
+  - '--allow-unauthenticated'  
