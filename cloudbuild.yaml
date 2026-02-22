@@ -1,9 +1,9 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build','-t','${_LOCATION}/${PROJECT_ID}/pyapp-repo/${_IMAGE}','.']
+  args: ['build','-t','${_IMAGENAME}','.']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push','${_LOCATION}/${PROJECT_ID}/pyapp-repo/${_IMAGE}']
+  args: ['push','${_IMAGENAME}']
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
@@ -12,7 +12,7 @@ steps:
   - 'deploy'
   - 'pyflaskapp'
   - '--image'
-  - '${_LOCATION}/${PROJECT_ID}/pyapp-repo/${_IMAGE}'
+  - '${_IMAGENAME}'
   - '--region'
   - 'asia-south1'
   - '--allow-unauthenticated'  
@@ -21,5 +21,6 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 substitutions:
-  _IMAGE: pyappimage:latest
+  _IMAGE: pyapp-repo/pyappimage:latest
   _LOCATION: asia-south1-docker.pkg.dev
+  _IMAGENAME: ${_LOCATION}/${PROJECT_ID}/${_IMAGE}
